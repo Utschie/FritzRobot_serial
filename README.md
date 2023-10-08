@@ -1,2 +1,2 @@
 # FritzRobot_serial
-read robot's state from USBVcom and publish them.
+read robot's state from USBVCom and publish them.
