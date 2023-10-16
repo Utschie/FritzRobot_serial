@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>fritzrobot_serial</name>
+  <version>0.0.0</version>
+  <description>The fritzrobot_serial package</description>
+
+  <maintainer email="shengyao.jiang@rwth-aachen.de">Shengyao Jiang</maintainer>
+  <license>MIT</license>
+  <url type="website">https://github.com/Utschie/FritzRobot_serial</url>
+  <author email="shengyao.jiang@rwth-aachen.de">Shengyao Jiang</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>serial</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>serial</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>serial</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+</package>
