@@ -47,7 +47,7 @@ int main(int argc, char** argv)
         size_t n = sp.available();
         if(n!=0)
         {
-            uint8_t buffer[256];
+            uint8_t buffer[280];
             //读出数据
             n = sp.read(buffer, n);
 
@@ -59,8 +59,6 @@ int main(int argc, char** argv)
 
             }
             std::cout << std::endl;
-            //把数据发送回去
-            //sp.write(buffer, n);
         }
         loop_rate.sleep();
     }
