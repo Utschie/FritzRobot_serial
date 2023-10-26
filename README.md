@@ -1,4 +1,7 @@
 # FritzRobot_serial
+### 2023-10-26 update
+defined Wheelspeed.msg, implemented driver node to read from USB and publish to topics /chassis/imu /chassis/vel /chassis/wheelspeed. While some bugs exists,showing segmentation fault (core dumped).
+
 ### 2023-10-25 update
 The data is read from the USBVCom. However, a very bad thing is that because now the output of the USBVCom is currently in the form of a uint8_t array, the array has to be converted to a string in the read by first extracting segments from the vector, and then converting the string to a float. 
 
