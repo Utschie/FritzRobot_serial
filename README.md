@@ -1,4 +1,7 @@
 # FritzRobot_serial
+### 2023-10-27 update
+when reading the USB input buffer, if the data size is wrong, flush the input buffer. Seems to work for the segmentation fault.
+
 ### 2023-10-26 update
 defined Wheelspeed.msg, implemented driver node to read from USB and publish to topics /chassis/imu /chassis/vel /chassis/wheelspeed. While some bugs exists,showing segmentation fault (core dumped).
 

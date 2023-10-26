@@ -124,6 +124,9 @@ int main(int argc, char** argv)
 
                     //std::cout <<std::fixed<<std::setprecision(6) << fAcc_x << " ";
                 }
+            }else
+            {
+                sp.flushInput();//如果缓冲区的数据不对则清空缓冲区，避免出现段错误
             }
             //std::cout << n << " ";
             //std::cout << std::endl;
