@@ -58,9 +58,9 @@ int main(int argc, char** argv)
         size_t n = sp.available();
         if(n!=0)
         {
-            uint8_t buffer[280];
+            uint8_t buffer[256];
             //读出数据
-            if (n==267) {
+            if (n==203) {
                 n = sp.read(buffer, n);
                 if (buffer[0] == 97 && buffer[1] == 99 && buffer[2] == 99) {
                     vector<uint8_t> vbuffer(buffer, buffer + sizeof(buffer));//array to vector for convenience
@@ -70,27 +70,19 @@ int main(int argc, char** argv)
                     string sOmega_x(vbuffer.begin() + 54, vbuffer.begin() + 63);
                     string sOmega_y(vbuffer.begin() + 67, vbuffer.begin() + 76);
                     string sOmega_z(vbuffer.begin() + 80, vbuffer.begin() + 89);
-                    string sQuaternion_w(vbuffer.begin() + 105, vbuffer.begin() + 114);
-                    string sQuaternion_x(vbuffer.begin() + 118, vbuffer.begin() + 127);
-                    string sQuaternion_y(vbuffer.begin() + 131, vbuffer.begin() + 140);
-                    string sQuaternion_z(vbuffer.begin() + 144, vbuffer.begin() + 153);
-                    string sWheelspeed_LF(vbuffer.begin() + 170, vbuffer.begin() + 179);
-                    string sWheelspeed_RF(vbuffer.begin() + 184, vbuffer.begin() + 193);
-                    string sWheelspeed_LB(vbuffer.begin() + 198, vbuffer.begin() + 207);
-                    string sWheelspeed_RB(vbuffer.begin() + 212, vbuffer.begin() + 221);
-                    string sVx(vbuffer.begin() + 229, vbuffer.begin() + 238);
-                    string sVy(vbuffer.begin() + 243, vbuffer.begin() + 252);
-                    string sVz(vbuffer.begin() + 257, vbuffer.begin() + 266);
+                    string sWheelspeed_LF(vbuffer.begin() + 106, vbuffer.begin() + 115);
+                    string sWheelspeed_RF(vbuffer.begin() + 120, vbuffer.begin() + 129);
+                    string sWheelspeed_LB(vbuffer.begin() + 134, vbuffer.begin() + 143);
+                    string sWheelspeed_RB(vbuffer.begin() + 148, vbuffer.begin() + 157);
+                    string sVx(vbuffer.begin() + 165, vbuffer.begin() + 174);
+                    string sVy(vbuffer.begin() + 179, vbuffer.begin() + 188);
+                    string sVz(vbuffer.begin() + 193, vbuffer.begin() + 202);
                     float fAcc_x = stof(sAcc_x);
                     float fAcc_y = stof(sAcc_y);
                     float fAcc_z = stof(sAcc_z);
                     float fOmega_x = stof(sOmega_x);
                     float fOmega_y = stof(sOmega_y);
                     float fOmega_z = stof(sOmega_z);
-                    float fQuaternion_w = stof(sQuaternion_w);
-                    float fQuaternion_x = stof(sQuaternion_x);
-                    float fQuaternion_y = stof(sQuaternion_y);
-                    float fQuaternion_z = stof(sQuaternion_z);
                     float fWheelspeed_LF = stof(sWheelspeed_LF);
                     float fWheelspeed_RF = stof(sWheelspeed_RF);
                     float fWheelspeed_LB = stof(sWheelspeed_LB);
@@ -99,10 +91,7 @@ int main(int argc, char** argv)
                     float fVy = stof(sVy);
                     float fVz = stof(sVz);
                     sensor_msgs::Imu msg_imu;
-                    msg_imu.orientation.w = fQuaternion_w;
-                    msg_imu.orientation.x = fQuaternion_x;
-                    msg_imu.orientation.y = fQuaternion_y;
-                    msg_imu.orientation.z = fQuaternion_z;
+                    msg_imu.header.frame_id="imu";
                     msg_imu.angular_velocity.x = fOmega_x;
                     msg_imu.angular_velocity.y = fOmega_y;
                     msg_imu.angular_velocity.z = fOmega_z;

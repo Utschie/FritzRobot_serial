@@ -19,6 +19,8 @@
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>serial</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
+  <build_depend>fritzrobot_serial_containing_custom_msg</build_depend>
+  <exec_depend>fritzrobot_serial_containing_custom_msg</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>serial</exec_depend>
   <exec_depend>std_msgs</exec_depend>
