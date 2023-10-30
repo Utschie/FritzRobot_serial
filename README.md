@@ -1,10 +1,13 @@
 # FritzRobot_serial
 ### 2023-10-30 update
 added a new node estimating the pose of the robot. Since the daily scenario is 2D plane，so the z is set to be constant, which can help decrease the estimates‘ jitter. In the video is the pose estimation in 3D scenario.
-
+<!--
 <video width="320" height="240" controls>
     <source src="media/VID_20231030_192910.mp4" type="video/mp4">
 </video>
+-->
+
+https://user-images.githubusercontent.com/33782458/279166788-9cf906c9-b439-4dda-a0e9-c7a8e0e92db5.mp4
 
 ### 2023-10-27 update
 when reading the USB input buffer, if the data size is wrong, flush the input buffer. Seems to work for the segmentation fault.
