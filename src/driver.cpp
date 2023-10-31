@@ -61,7 +61,7 @@ int main(int argc, char** argv)
             uint8_t buffer[256];
             //读出数据
             if (n==203) {
-                n = sp.read(buffer, n);
+                sp.read(buffer, n);
                 if (buffer[0] == 97 && buffer[1] == 99 && buffer[2] == 99) {
                     vector<uint8_t> vbuffer(buffer, buffer + sizeof(buffer));//array to vector for convenience
                     string sAcc_x(vbuffer.begin() + 8, vbuffer.begin() + 17);

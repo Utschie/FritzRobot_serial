@@ -21,3 +21,5 @@ add_executable(pose_estimation src/pose_estimation.cpp
         src/ekf.cpp)
 target_link_libraries(pose_estimation ${catkin_LIBRARIES})
 
+add_executable(downstream src/downstream.cpp)
+target_link_libraries(downstream ${catkin_LIBRARIES})
