@@ -4,10 +4,7 @@
 
 added downstream communication node to send transfer the msgs from /cmd_vel to MCU.
 
-```
-sudo apt-get install ros-noetic-teleop-twist-joy
-sudo apt-get install ros-noetic-joy
-```
+
 ### 2023-10-30 update
 added a new node estimating the pose of the robot. Since the daily scenario is 2D plane，so the z is set to be constant, which can help decrease the estimates‘ jitter. In the video is the pose estimation in 3D scenario.
 <!--
