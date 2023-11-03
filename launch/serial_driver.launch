@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="fritzrobot_serial" name="upstream" type="upstream"/>
+    <node pkg="fritzrobot_serial" name="downstream" type="downstream"/>
+    <node pkg="fritzrobot_serial" name="pose_estimation" type="pose_estimation"/>
+
+</launch>

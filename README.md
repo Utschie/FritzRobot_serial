@@ -3,6 +3,8 @@
 ## Description
  There are 3 nodes in this pkg. The nodes "downstream" and "upstream" communicate with the MCU. And the pose_estimation is to estimate the 2D/3D orientation of the robot.
 ##
+### 2023-11-03 update
+added launch file to start the "upstream", "downstream" and "pose_estimation" nodes.
 ### 2023-10-31 update
 
 added downstream communication node to send transfer the msgs from /cmd_vel to MCU.
