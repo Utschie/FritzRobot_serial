@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/TwistStamped.h>
 #include <sensor_msgs/Imu.h>
 #include "fritzrobot_serial/Wheelspeed.h"
 using namespace std;
@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     ros::NodeHandle h;
     ros::Publisher imu_pub = h.advertise<sensor_msgs::Imu>("chassis/imu",1);
     ros::Publisher wheelspeed_pub=h.advertise<fritzrobot_serial::Wheelspeed>("chassis/wheelspeed",1);
-    ros::Publisher vel_pub=h.advertise<geometry_msgs::Twist>("chassis/vel",1);
+    ros::Publisher vel_pub=h.advertise<geometry_msgs::TwistStamped>("chassis/vel",1);
 
 
 
@@ -52,9 +52,12 @@ int main(int argc, char** argv)
     }
 
     ros::Rate loop_rate(200);//设置节点的loop频率，这里是一秒转200次
+    ros::Time current_time;
     while(ros::ok())
     {
         //获取缓冲区内的字节数
+
+        current_time = ros::Time::now();
         size_t n = sp.available();
         if(n!=0)
         {
@@ -91,6 +94,7 @@ int main(int argc, char** argv)
                     float fVy = stof(sVy);
                     float fVz = stof(sVz);
                     sensor_msgs::Imu msg_imu;
+                    msg_imu.header.stamp=current_time;
                     msg_imu.header.frame_id="imu";
                     msg_imu.angular_velocity.x = fOmega_x;
                     msg_imu.angular_velocity.y = fOmega_y;
@@ -98,11 +102,13 @@ int main(int argc, char** argv)
                     msg_imu.linear_acceleration.x = fAcc_x;
                     msg_imu.linear_acceleration.y = fAcc_y;
                     msg_imu.linear_acceleration.z = fAcc_z;
-                    geometry_msgs::Twist msg_vel;
-                    msg_vel.linear.x = fVx;
-                    msg_vel.linear.y = fVy;
-                    msg_vel.angular.z = fVz;
+                    geometry_msgs::TwistStamped msg_vel;
+                    msg_vel.header.stamp=current_time;
+                    msg_vel.twist.linear.x = fVx;
+                    msg_vel.twist.linear.y = fVy;
+                    msg_vel.twist.angular.z = fVz;
                     fritzrobot_serial::Wheelspeed msg_wl;
+                    msg_wl.header.stamp=current_time;
                     msg_wl.vLF = fWheelspeed_LF;
                     msg_wl.vRF = fWheelspeed_RF;
                     msg_wl.vLB = fWheelspeed_LB;

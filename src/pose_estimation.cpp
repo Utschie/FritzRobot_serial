@@ -1,7 +1,6 @@
 #include <ros/ros.h>
 #include <vector>
 #include <numeric>
-#include <geometry_msgs/Twist.h>
 #include <sensor_msgs/Imu.h>
 #include <Eigen>
 #include "ekf.h"
@@ -9,21 +8,23 @@ using namespace std;
 using namespace ros;
 using namespace Eigen;
 
-static ros::Publisher pose_pub;
-static ros::Subscriber imu_sub;
+ros::Publisher* pose_pub= nullptr;
+ros::Subscriber* imu_sub= nullptr;
+ros::Time* current_time= nullptr;
+ros::Time* last_time= nullptr;
 static EKF estimator(1.0,0.0,0.0,0.0);//initialize the orientation
-static vector<float> g1,g2,g3;
+static vector<double> g1,g2,g3;
 static int ready_flag=0;
 void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
 {
 
-
-    float wx=msg->angular_velocity.x;
-    float wy=msg->angular_velocity.y;
-    float wz=msg->angular_velocity.z;
-    float ax=msg->linear_acceleration.x;
-    float ay=msg->linear_acceleration.y;
-    float az=msg->linear_acceleration.z;
+    *current_time = ros::Time::now();
+    double wx=msg->angular_velocity.x;
+    double wy=msg->angular_velocity.y;
+    double wz=msg->angular_velocity.z;
+    double ax=msg->linear_acceleration.x;
+    double ay=msg->linear_acceleration.y;
+    double az=msg->linear_acceleration.z;
 
     if (g1.size()<300)
     {
@@ -33,31 +34,31 @@ void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
     }
     if(g1.size()==300)
     {
-        float g1_sum= accumulate(g1.begin(),g1.end(),0.0);
-        float g2_sum= accumulate(g2.begin(),g2.end(),0.0);
-        float g3_sum= accumulate(g3.begin(),g3.end(),0.0);
-        float gx=g1_sum/g1.size();
-        float gy=g2_sum/g2.size();
-        float gz=g3_sum/g3.size();
+        double g1_sum= accumulate(g1.begin(),g1.end(),0.0);
+        double g2_sum= accumulate(g2.begin(),g2.end(),0.0);
+        double g3_sum= accumulate(g3.begin(),g3.end(),0.0);
+        double gx=g1_sum/g1.size();
+        double gy=g2_sum/g2.size();
+        double gz=g3_sum/g3.size();
         estimator.setz(gx,gy,gz);
         ready_flag=1;
     }
 
-    float dt = 0.02;
+    double dt = (*current_time - *last_time).toSec();
     //estimator.setz(ax,ay,az);
 
     if (ready_flag==1)
     {
         estimator.predict(wx,wy,wz,dt);
         estimator.update();
-        float q0=estimator.state_vector(0);
-        float q1=estimator.state_vector(1);
-        float q2=estimator.state_vector(2);
-        float q3=estimator.state_vector(3);
-        //float q0=estimator.quat_est(0);
-        //float q1=estimator.quat_est(1);
-        //float q2=estimator.quat_est(2);
-        //float q3=estimator.quat_est(3);
+        double q0=estimator.state_vector(0);
+        double q1=estimator.state_vector(1);
+        double q2=estimator.state_vector(2);
+        double q3=estimator.state_vector(3);
+        //double q0=estimator.quat_est(0);
+        //double q1=estimator.quat_est(1);
+        //double q2=estimator.quat_est(2);
+        //double q3=estimator.quat_est(3);
         sensor_msgs::Imu pub_msg;
         pub_msg.header.frame_id="base_link";
         pub_msg.orientation.w=q0;
@@ -67,9 +68,9 @@ void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
         //pub_msg.angular_velocity.x=wx;
         //pub_msg.angular_velocity.y=wy;
         //pub_msg.angular_velocity.z=wz;
-        pose_pub.publish(pub_msg);
+        pose_pub->publish(pub_msg);
     }
-
+    *last_time = *current_time;
     ros::Rate loop_rate(50);//设置节点的loop频率
     loop_rate.sleep();
 
@@ -79,15 +80,19 @@ void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
 int main(int argc, char** argv) {
     ros::init(argc, argv, "pose_estimation");//初始化节点和名称
     ros::NodeHandle h;
-    pose_pub = h.advertise<sensor_msgs::Imu>("chassis/pose", 1);
-    imu_sub = h.subscribe("chassis/imu", 1, ekfCallback);
-
-
+    pose_pub=new ros::Publisher;
+    imu_sub=new ros::Subscriber;
+    *pose_pub = h.advertise<sensor_msgs::Imu>("chassis/pose", 1);
+    *imu_sub = h.subscribe("chassis/imu", 1, ekfCallback);
+    *current_time= ros::Time::now();
+    *last_time= ros::Time::now();
     //while(ros::ok())
     //{
     //    ros::spinOnce();
     //}
     ros::spin();
+    delete pose_pub;
+    delete imu_sub;
     return 0;
 
 }
