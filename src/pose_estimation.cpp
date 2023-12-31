@@ -60,6 +60,7 @@ void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
         //double q2=estimator.quat_est(2);
         //double q3=estimator.quat_est(3);
         sensor_msgs::Imu pub_msg;
+        pub_msg.header.stamp=ros::Time::now();
         pub_msg.header.frame_id="base_link";
         pub_msg.orientation.w=q0;
         pub_msg.orientation.x=q1;
@@ -80,8 +81,12 @@ void ekfCallback(const sensor_msgs::Imu::ConstPtr& msg )
 int main(int argc, char** argv) {
     ros::init(argc, argv, "pose_estimation");//初始化节点和名称
     ros::NodeHandle h;
+
     pose_pub=new ros::Publisher;
     imu_sub=new ros::Subscriber;
+    current_time=new ros::Time;
+    last_time=new ros::Time;
+
     *pose_pub = h.advertise<sensor_msgs::Imu>("chassis/pose", 1);
     *imu_sub = h.subscribe("chassis/imu", 1, ekfCallback);
     *current_time= ros::Time::now();
@@ -93,6 +98,8 @@ int main(int argc, char** argv) {
     ros::spin();
     delete pose_pub;
     delete imu_sub;
+    delete current_time;
+    delete last_time;
     return 0;
 
 }
